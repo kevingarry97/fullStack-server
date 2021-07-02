@@ -16,9 +16,14 @@ app.use(parser.json())
 app.use(parser.urlencoded({extended: true}))
 
 app.get('/album/:id', async (req, res) => {
-    const data = await (await fetch(`${apiUrl}/${req.params.id}/photos`)).json()
+    const result = await (await fetch(`${apiUrl}/${req.params.id}/photos`)).json()
 
-    res.send(data)
+    res.status(200).json(
+        result.map(item => ({
+            title: item.title,
+            thumbnailUrl: item.thumbnailUrl
+        }))
+    )
 })
 
 const port = process.env.PORT || 4000
